@@ -118,3 +118,9 @@
 /Users/hitesh/Desktop/JobHunter/JobHunterApi/JobHunterApi/obj/Debug/net8.0/JobHunterApi.pdb
 /Users/hitesh/Desktop/JobHunter/JobHunterApi/JobHunterApi/obj/Debug/net8.0/JobHunterApi.genruntimeconfig.cache
 /Users/hitesh/Desktop/JobHunter/JobHunterApi/JobHunterApi/obj/Debug/net8.0/ref/JobHunterApi.dll
+/Users/hitesh/Desktop/JobHunter/JobHunterApi/JobHunterApi/bin/Debug/net8.0/publish/web.config
+/Users/hitesh/Desktop/JobHunter/JobHunterApi/JobHunterApi/bin/Debug/net8.0/publish/appsettings.Development.json
+/Users/hitesh/Desktop/JobHunter/JobHunterApi/JobHunterApi/bin/Debug/net8.0/publish/appsettings.json
+/Users/hitesh/Desktop/JobHunter/JobHunterApi/JobHunterApi/bin/Debug/net8.0/publish/JobHunterApi.deps.json
+/Users/hitesh/Desktop/JobHunter/JobHunterApi/JobHunterApi/bin/Debug/net8.0/publish/JobHunterApi.runtimeconfig.json
+/Users/hitesh/Desktop/JobHunter/JobHunterApi/JobHunterApi/obj/Debug/net8.0/JobHunterApi.sourcelink.json

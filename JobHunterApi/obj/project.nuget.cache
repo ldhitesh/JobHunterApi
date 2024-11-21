@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "PnJtmtcdNhA=",
+  "dgSpecHash": "+z9l/1bT3zQ=",
   "success": true,
-  "projectFilePath": "/Users/hitesh/Desktop/JobHunter/JobHunterApi1/JobHunterApi/JobHunterApi.csproj",
+  "projectFilePath": "/Users/hitesh/Desktop/JobHunter/JobHunterApi/JobHunterApi/JobHunterApi.csproj",
   "expectedPackageFiles": [
     "/Users/hitesh/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",
     "/Users/hitesh/.nuget/packages/microsoft.aspnetcore.authentication/2.2.0/microsoft.aspnetcore.authentication.2.2.0.nupkg.sha512",

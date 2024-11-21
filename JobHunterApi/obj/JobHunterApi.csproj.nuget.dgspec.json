@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/hitesh/Desktop/JobHunter/JobHunterApi1/JobHunterApi/JobHunterApi.csproj": {}
+    "/Users/hitesh/Desktop/JobHunter/JobHunterApi/JobHunterApi/JobHunterApi.csproj": {}
   },
   "projects": {
-    "/Users/hitesh/Desktop/JobHunter/JobHunterApi1/JobHunterApi/JobHunterApi.csproj": {
+    "/Users/hitesh/Desktop/JobHunter/JobHunterApi/JobHunterApi/JobHunterApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/hitesh/Desktop/JobHunter/JobHunterApi1/JobHunterApi/JobHunterApi.csproj",
+        "projectUniqueName": "/Users/hitesh/Desktop/JobHunter/JobHunterApi/JobHunterApi/JobHunterApi.csproj",
         "projectName": "JobHunterApi",
-        "projectPath": "/Users/hitesh/Desktop/JobHunter/JobHunterApi1/JobHunterApi/JobHunterApi.csproj",
+        "projectPath": "/Users/hitesh/Desktop/JobHunter/JobHunterApi/JobHunterApi/JobHunterApi.csproj",
         "packagesPath": "/Users/hitesh/.nuget/packages/",
-        "outputPath": "/Users/hitesh/Desktop/JobHunter/JobHunterApi1/JobHunterApi/obj/",
+        "outputPath": "/Users/hitesh/Desktop/JobHunter/JobHunterApi/JobHunterApi/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/hitesh/.nuget/NuGet/NuGet.Config"
