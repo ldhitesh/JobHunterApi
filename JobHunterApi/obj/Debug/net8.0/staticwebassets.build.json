@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "7grKbRL+q6phg96ugQLKOFI2ktKKlyyXyeEolmLuBxw=",
+  "Source": "JobHunterApi",
+  "BasePath": "_content/JobHunterApi",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
