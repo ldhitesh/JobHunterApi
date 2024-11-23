@@ -14,7 +14,6 @@ namespace JobHunterApi.Controllers
         public CompaniesController(CompaniesDbContext context)
         {
             _context = context;
-
         }
 
         // GET: api/companies
