@@ -1,34 +1,27 @@
-# Step 1: Use the official .NET SDK image to build the application
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+# Use the official .NET SDK image to build the app
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
 
-# Set the working directory inside the container
 WORKDIR /app
 
-# Copy the project file and restore any dependencies (via dotnet restore)
-COPY ["JobHunterApi/JobHunterApi.csproj", "JobHunterApi/"]
+# Copy the project files and restore dependencies
+COPY JobHunterApi/*.csproj ./
+RUN dotnet restore
 
-# Restore dependencies
-RUN dotnet restore "JobHunterApi/JobHunterApi.csproj"
+# Copy the rest of the app and publish it
+COPY . ./
+RUN dotnet publish -c Release -o out
 
-# Copy the entire project and build it
-COPY . .
-RUN dotnet build "JobHunterApi/JobHunterApi.csproj" -c Release -o /app/build
+# Use the official ASP.NET runtime image for the final image
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
 
-# Step 2: Publish the app to /app/publish directory
-FROM build AS publish
-RUN dotnet publish "JobHunterApi/JobHunterApi.csproj" -c Release -o /app/publish
-
-# Step 3: Use the runtime image to run the app
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
-
-# Set the working directory in the container
 WORKDIR /app
+EXPOSE 8080
 
-# Copy the published files from the previous image
-COPY --from=publish /app/publish .
+# Copy the published app from the build image
+COPY --from=build-env /app/out .
 
-# Expose port 80 for the API
-EXPOSE 80
+# Set environment variables (you can also set the connection string here)
+ENV CONNECTION_STRING="Server=mysql;Database=JobHunter;User=root;Password=hitesh1312;Port=3306"
 
-# Set the entry point to run the application
+# Entry point to start the API
 ENTRYPOINT ["dotnet", "JobHunterApi.dll"]
