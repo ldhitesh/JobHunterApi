@@ -8,6 +8,17 @@ using JobHunterApi.Database;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularApp", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200") // Angular app URL
+              .AllowAnyMethod()                    // Allow all HTTP methods
+              .AllowAnyHeader()                    // Allow all headers
+              .AllowCredentials();                 // Allow cookies and credentials
+    });
+});
+
 builder.Services.AddDbContext<CompaniesDbContext>(options =>
     options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), 
     ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))));
@@ -21,16 +32,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<UserDbContext>()
     .AddDefaultTokenProviders();
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAngularApp", builder =>
-    {
-        builder.WithOrigins("http://localhost:4200") // Angular app URL
-               .AllowAnyMethod()                    // Allow all HTTP methods
-               .AllowAnyHeader()                    // Allow all headers
-               .AllowCredentials();                 // Allow cookies and credentials
-    });
-});
+
 
 
 // Add JWT Authentication

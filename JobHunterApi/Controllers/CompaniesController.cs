@@ -16,14 +16,23 @@ namespace JobHunterApi.Controllers
             _context = context;
         }
 
-        // GET: api/companies
+        // GET: api/companies/getcompaniesnames
+        [HttpGet("getcompanyreferences")]
+        public async Task<IActionResult> GetCompanyReferences()
+        {
+          var references = await _context.CompanyReferences
+                                .OrderBy(c => c.Organization)  
+                                .Select(c => new { c.Organization,c.Name, c.Email })
+                                .ToListAsync();
+            return Ok(references);
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetCompanies()
         {
             var companies = await _context.Companies.ToListAsync();
             return Ok(companies);
         }
-
       
         //POST: api/companies/addcompany
         [HttpPost("addcompany")]

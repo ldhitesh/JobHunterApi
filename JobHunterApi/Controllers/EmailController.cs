@@ -28,7 +28,7 @@ namespace JobHunterApi.Controllers
                 {
                     From = new MailAddress("hiteshlakshmaiahdinesh@gmail.com"),
                     Subject = emaildata.Subject ?? "No Subject",
-                    Body = emaildata.Body.Replace("\n", "<br>") ?? "No Body",
+                    Body = emaildata.Body, //.Replace("\n", "<pre>") ?? "No Body",
                     IsBodyHtml = true,
                 };
 
