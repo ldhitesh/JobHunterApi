@@ -24,20 +24,12 @@ namespace JobHunterApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] User model)
         {
-            // Validate input
-            if (string.IsNullOrEmpty(model.Username) || string.IsNullOrEmpty(model.Password))
-            {
-                return BadRequest(new { message = "Username and password are required." });
-            }
-
-            // Authenticate the user
-            var user = await _userManager.FindByNameAsync(model.Username);
+            var user = await _userManager.FindByNameAsync(model.UserName);
             if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
             {
                 return Unauthorized(new { message = "Invalid username or password." });
             }
 
-            // Generate JWT token
             var token = GenerateJwtToken(user);
 
             // Return token and user details
@@ -52,25 +44,30 @@ namespace JobHunterApi.Controllers
             });
         }
 
-        private string GenerateJwtToken(IdentityUser user)
+
+        private async Task<string> GenerateJwtToken(IdentityUser user)
         {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]??"");
+
+           var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, user.UserName ?? ""),
+                    new Claim(ClaimTypes.Email, user.Email ?? "")
+                };
+            var roles=await _userManager.GetRolesAsync(user);
+
+            claims.AddRange(roles.Select(role=>new Claim(ClaimTypes.Role,role)));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]??""));
+            var creds= new SigningCredentials(key,SecurityAlgorithms.HmacSha256Signature);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim(ClaimTypes.Name, user.UserName??""),
-                    new Claim(ClaimTypes.Email, user.Email ?? "")
-                }),
-                SigningCredentials = new SigningCredentials(
-                    new SymmetricSecurityKey(key),
-                    SecurityAlgorithms.HmacSha256Signature)
+                Subject = new ClaimsIdentity(claims),
+                SigningCredentials = creds
             };
-
+            var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
+
         }
 
     }
