@@ -14,18 +14,15 @@ public class RegisterController : ControllerBase
 {
     private readonly UserManager<IdentityUser> _userManager;
 
-    private readonly RoleManager<IdentityRole> _roleManager;
     private readonly CompaniesDbContext _context;
     private readonly IConfiguration _configuration;
 
     public RegisterController(UserManager<IdentityUser> userManager,
                             CompaniesDbContext context,
-                            RoleManager<IdentityRole> roleManager,
                             IConfiguration configuration)
     {
         _userManager = userManager;
         _context= context;
-        _roleManager=roleManager;
         _configuration = configuration;
 
     }
@@ -68,14 +65,22 @@ public class RegisterController : ControllerBase
             return BadRequest(result.Errors);
         }
         
-        //added
-        await _roleManager.CreateAsync(new IdentityRole("admin"));
-
-        if (user.UserName=="Hitesh")
+        if(user.UserName=="Hitesh"){
+            var addToRoleResult = await _userManager.AddToRoleAsync(user, "Admin");
+            if (!addToRoleResult.Succeeded)
         {
-            await _userManager.AddToRoleAsync(user, "admin");
+            return BadRequest(new { message = "Failed to assign role" });
+        }
+        }
+        else{
+            var addToRoleResult = await _userManager.AddToRoleAsync(user, "User");
+            if (!addToRoleResult.Succeeded)
+        {
+            return BadRequest(new { message = "Failed to assign role" });
+        }
         }
 
+        
         var token =await GenerateJwtToken(user);
         return Ok(new { Message="Registered Successfully! Please login!" ,token});
     }
@@ -89,9 +94,7 @@ public class RegisterController : ControllerBase
                 new Claim(ClaimTypes.Name, user.UserName ?? ""),
                 new Claim(ClaimTypes.Email, user.Email ?? "")
             };
-        var roles=await _userManager.GetRolesAsync(user);
 
-        claims.AddRange(roles.Select(role=>new Claim(ClaimTypes.Role,role)));
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]??""));
         var creds= new SigningCredentials(key,SecurityAlgorithms.HmacSha256Signature);
 

@@ -32,9 +32,6 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<UserDbContext>()
     .AddDefaultTokenProviders();
 
-
-
-
 // Add JWT Authentication
 builder.Services.AddAuthentication(options =>
 {
@@ -71,10 +68,37 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
+await SeedRolesAsync(app.Services);
+
 app.UseCors("AllowAngularApp");
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+
+
 app.Run();
+
+async Task SeedRolesAsync(IServiceProvider services)
+{
+    using (var scope = services.CreateScope())
+    {
+        var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+        var roles = new[] { "Admin", "User" };
+
+        foreach (var role in roles)
+        {
+            var roleExist = await roleManager.RoleExistsAsync(role);
+            if (!roleExist)
+            {
+                var roleResult = await roleManager.CreateAsync(new IdentityRole(role));
+                if (!roleResult.Succeeded)
+                {
+                    Console.WriteLine($"Error creating role: {role}");
+                }
+            }
+        }
+    }
+}

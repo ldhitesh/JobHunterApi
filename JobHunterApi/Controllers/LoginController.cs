@@ -31,10 +31,10 @@ namespace JobHunterApi.Controllers
             }
 
             var token = GenerateJwtToken(user);
-
-            // Return token and user details
+            var role = await _userManager.GetRolesAsync(user);
             return Ok(new
             {
+                Role=role ,
                 Token = token,
                 UserDetails = new
                 {
@@ -53,9 +53,7 @@ namespace JobHunterApi.Controllers
                     new Claim(ClaimTypes.Name, user.UserName ?? ""),
                     new Claim(ClaimTypes.Email, user.Email ?? "")
                 };
-            var roles=await _userManager.GetRolesAsync(user);
 
-            claims.AddRange(roles.Select(role=>new Claim(ClaimTypes.Role,role)));
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]??""));
             var creds= new SigningCredentials(key,SecurityAlgorithms.HmacSha256Signature);
 
