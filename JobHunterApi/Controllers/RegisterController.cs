@@ -29,9 +29,12 @@ public class RegisterController : ControllerBase
     [HttpGet("getpendingregistrations")]
     public async Task<IActionResult> GetPendingApplications()
     {
-        var pendingregistrations = await _context.PendingRegistrations.ToListAsync(); 
+        var pendingregistrations = await _context.PendingRegistrations.
+                            Select(u => new { u.Username, u.Email })  
+                            .ToListAsync(); 
         return Ok(pendingregistrations);
     }
+
 
     [HttpPost("pendingregistrations")]
     public async Task<IActionResult> GetPendingApplications([FromBody] RegisterModel user)
@@ -43,50 +46,84 @@ public class RegisterController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Register([FromBody] RegisterModel model)
+    public async Task<IActionResult> Register([FromBody] RegisterUserModel userdetails)
     {
+        if (userdetails==null)
+        {
+            return BadRequest(new { message = "Wrong User Details" });
+        }
+        var user = await _context.PendingRegistrations
+                                    .FirstOrDefaultAsync(c => c.Username.ToLower() == userdetails.Username.ToLower());
+
+        if(user==null){
+            BadRequest("UserName not fount");
+        }
         // Check if user already exists
-        var existingUser = await _userManager.FindByNameAsync(model.Username);
+        var existingUser = await _userManager.FindByNameAsync(userdetails.Username);
         if (existingUser != null)
         {
             return BadRequest(new { message = "Username is already taken" });
         }
 
         // Create a new user
-        var user = new IdentityUser
+        var userdata = new IdentityUser
         {
-            UserName = model.Username,
-            Email = model.Email
+            UserName = userdetails.Username,
+            Email = userdetails.Email,
         };
 
-        var result = await _userManager.CreateAsync(user, model.Password);
+        var result = await _userManager.CreateAsync(userdata, user.Password);
         if (!result.Succeeded)
         {
             return BadRequest(result.Errors);
         }
         
-        if(user.UserName=="Hitesh"){
-            var addToRoleResult = await _userManager.AddToRoleAsync(user, "Admin");
+        if(userdata.UserName=="Hitesh"){
+            var addToRoleResult = await _userManager.AddToRoleAsync(userdata, "Admin");
             if (!addToRoleResult.Succeeded)
         {
             return BadRequest(new { message = "Failed to assign role" });
         }
         }
         else{
-            var addToRoleResult = await _userManager.AddToRoleAsync(user, "User");
+            var addToRoleResult = await _userManager.AddToRoleAsync(userdata, "User");
             if (!addToRoleResult.Succeeded)
         {
             return BadRequest(new { message = "Failed to assign role" });
         }
         }
 
-        
-        var token =await GenerateJwtToken(user);
-        return Ok(new { Message="Registered Successfully! Please login!" ,token});
+        _context.PendingRegistrations.Remove(user);
+        await _context.SaveChangesAsync();
+
+        var token =GenerateJwtToken(userdata);
+
+        return Ok(new { Message="User Registeration was Successfully!" ,token});
     }
 
 
-    private async Task<string> GenerateJwtToken(IdentityUser user)
+    [HttpDelete("rejectregistration/{username}")]
+    public async Task<IActionResult> DeleteCompany(string username)
+    {
+        
+        if (username==null)
+        {
+            return BadRequest(new { message = "UserName is required." });
+        }
+        var user = await _context.PendingRegistrations
+                                    .FirstOrDefaultAsync(c => c.Username.ToLower() == username.ToLower());
+        if (user == null)
+        {
+            return NotFound(new { message = "User not found." });
+        }
+        _context.PendingRegistrations.Remove(user);
+        await _context.SaveChangesAsync();
+
+        return Ok(new { message = "User Approval Rejeted!" });
+    }
+
+
+    private string GenerateJwtToken(IdentityUser user)
     {
 
     var claims = new List<Claim>
@@ -104,7 +141,7 @@ public class RegisterController : ControllerBase
             SigningCredentials = creds
         };
         var tokenHandler = new JwtSecurityTokenHandler();
-        var token = tokenHandler.CreateToken(tokenDescriptor);
+        var token =  tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
 
     }

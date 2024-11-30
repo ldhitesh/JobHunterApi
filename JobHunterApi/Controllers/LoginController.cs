@@ -34,18 +34,17 @@ namespace JobHunterApi.Controllers
             var role = await _userManager.GetRolesAsync(user);
             return Ok(new
             {
-                Role=role ,
                 Token = token,
                 UserDetails = new
                 {
                     Username = user.UserName,
-                    Email = user.Email
+                    Role=role,
                 }
             });
         }
 
 
-        private async Task<string> GenerateJwtToken(IdentityUser user)
+        private string GenerateJwtToken(IdentityUser user)
         {
 
            var claims = new List<Claim>
