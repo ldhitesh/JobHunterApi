@@ -124,3 +124,7 @@
 /Users/hitesh/Desktop/JobHunter/JobHunterApi/JobHunterApi/bin/Debug/net8.0/publish/JobHunterApi.deps.json
 /Users/hitesh/Desktop/JobHunter/JobHunterApi/JobHunterApi/bin/Debug/net8.0/publish/JobHunterApi.runtimeconfig.json
 /Users/hitesh/Desktop/JobHunter/JobHunterApi/JobHunterApi/obj/Debug/net8.0/JobHunterApi.sourcelink.json
+/Users/hitesh/Desktop/JobHunter/JobHunterApi/JobHunterApi/bin/Debug/net8.0/Newtonsoft.Json.dll
+/Users/hitesh/Desktop/JobHunter/JobHunterApi/JobHunterApi/bin/Debug/net8.0/Stripe.net.dll
+/Users/hitesh/Desktop/JobHunter/JobHunterApi/JobHunterApi/bin/Debug/net8.0/System.Configuration.ConfigurationManager.dll
+/Users/hitesh/Desktop/JobHunter/JobHunterApi/JobHunterApi/bin/Debug/net8.0/System.Security.Cryptography.ProtectedData.dll
