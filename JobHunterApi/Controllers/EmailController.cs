@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Net;
 using System.Net.Mail;
 using System.Text;
@@ -18,6 +19,29 @@ namespace JobHunterApi.Controllers
         public EmailController(CompaniesDbContext context){
             _context = context;
         }
+
+        // [HttpPost("sendverificationmail")]
+        // public async Task<IActionResult> VerificationEmail([FromBody] EmailModel model)
+        // {
+        //     // Assuming user is successfully created
+            
+        // }
+
+
+        [HttpGet("verify-email")]
+        public async Task<IActionResult> VerifyEmail( string data, string email)
+        {
+        var Email = await _context.PendingRegistrations
+                                    .FirstOrDefaultAsync(c => c.Email == email);
+        if (Email!=null && Email.VerificationToken==data)
+            {
+                Email.AccountVerificationStatus = "Verified";  
+                await _context.SaveChangesAsync();
+                return Redirect("http://localhost:4200/login");
+            }
+            return BadRequest("Email Couldnt be Verified!");
+        }
+
         [HttpPost("send")]
         public async Task<IActionResult> SendEmail([FromBody] EmailModel emaildata)
         {
@@ -49,7 +73,6 @@ namespace JobHunterApi.Controllers
                             smtpClient.Send(mailMessage);
                     }
                     return Ok(new { message = "All Emails sent successfully!" });
-                    
                 }
                 else if(emaildata.To=="Employees"){
                     var Emails =  await _context.CompanyReferences
@@ -65,7 +88,7 @@ namespace JobHunterApi.Controllers
                     mailMessage.To.Add(emaildata.To);
                     smtpClient.Send(mailMessage);
                 }
-                
+                    
                 return Ok(new { message = "Email sent successfully!" });
 
             }

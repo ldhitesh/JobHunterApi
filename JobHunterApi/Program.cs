@@ -20,13 +20,13 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddDbContext<CompaniesDbContext>(options =>
-    options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), 
-    ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))));
+    options.UseMySql(builder.Configuration.GetConnectionString("LocalHostConnection"), 
+    ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("LocalHostConnection"))));
     
 // Add services to the container.
 builder.Services.AddDbContext<UserDbContext>(options =>
-    options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), 
-    ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))));
+    options.UseMySql(builder.Configuration.GetConnectionString("LocalHostConnection"), 
+    ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("LocalHostConnection"))));
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<UserDbContext>()

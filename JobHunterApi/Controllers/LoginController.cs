@@ -29,9 +29,9 @@ namespace JobHunterApi.Controllers
             {
                 return Unauthorized(new { message = "Invalid username or password." });
             }
-
-            var token = GenerateJwtToken(user);
             var role = await _userManager.GetRolesAsync(user);
+
+            var token = GenerateJwtToken(user,role);
             return Ok(new
             {
                 Token = token,
@@ -44,14 +44,16 @@ namespace JobHunterApi.Controllers
         }
 
 
-        private string GenerateJwtToken(IdentityUser user)
+        private string GenerateJwtToken(IdentityUser user,IList<string> role)
         {
 
            var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, user.UserName ?? ""),
-                    new Claim(ClaimTypes.Email, user.Email ?? "")
-                };
+                    new Claim(ClaimTypes.Email, user.Email ?? ""),
+                    new Claim(ClaimTypes.Role , role[0] ?? "")
+
+               };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]??""));
             var creds= new SigningCredentials(key,SecurityAlgorithms.HmacSha256Signature);
