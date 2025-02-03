@@ -54,6 +54,12 @@ namespace JobHunterApi.Controllers
                     EnableSsl = true,
                 };
                 
+                
+
+
+
+
+                
                 var mailMessage = new MailMessage
                 {
                     From = new MailAddress("hiteshlakshmaiahdinesh@gmail.com"),

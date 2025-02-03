@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace JobHunterApi.Migrations.UserDb
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class awsdb2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

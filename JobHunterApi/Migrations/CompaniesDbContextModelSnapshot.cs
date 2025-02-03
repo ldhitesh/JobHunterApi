@@ -51,20 +51,6 @@ namespace JobHunterApi.Migrations
                     b.ToTable("Companies");
                 });
 
-            modelBuilder.Entity("JobHunterApi.Models.EmailVerificationModel", b =>
-                {
-                    b.Property<string>("Email")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("VerificationToken")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Email");
-
-                    b.ToTable("EmailVerificationTokens");
-                });
-
             modelBuilder.Entity("JobHunterApi.Models.ReferencesModel", b =>
                 {
                     b.Property<int>("Id")
@@ -104,6 +90,10 @@ namespace JobHunterApi.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AccountVerificationStatus")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -117,6 +107,10 @@ namespace JobHunterApi.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("VerificationToken")
                         .IsRequired()
                         .HasColumnType("longtext");
 

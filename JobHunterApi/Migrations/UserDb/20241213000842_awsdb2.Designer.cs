@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JobHunterApi.Migrations.UserDb
 {
     [DbContext(typeof(UserDbContext))]
-    [Migration("20241204031644_newserverinit")]
-    partial class newserverinit
+    [Migration("20241213000842_awsdb2")]
+    partial class awsdb2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

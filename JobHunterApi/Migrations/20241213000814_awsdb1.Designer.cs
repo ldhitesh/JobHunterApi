@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JobHunterApi.Migrations
 {
     [DbContext(typeof(CompaniesDbContext))]
-    [Migration("20241127191505_init")]
-    partial class init
+    [Migration("20241213000814_awsdb1")]
+    partial class awsdb1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -93,6 +93,10 @@ namespace JobHunterApi.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AccountVerificationStatus")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -101,7 +105,15 @@ namespace JobHunterApi.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("PaymentStatus")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("VerificationToken")
                         .IsRequired()
                         .HasColumnType("longtext");
 
