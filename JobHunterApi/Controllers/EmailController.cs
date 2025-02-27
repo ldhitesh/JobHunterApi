@@ -31,13 +31,15 @@ namespace JobHunterApi.Controllers
         [HttpGet("verify-email")]
         public async Task<IActionResult> VerifyEmail( string data, string email)
         {
+        
+        
         var Email = await _context.PendingRegistrations
                                     .FirstOrDefaultAsync(c => c.Email == email);
         if (Email!=null && Email.VerificationToken==data)
             {
                 Email.AccountVerificationStatus = "Verified";  
                 await _context.SaveChangesAsync();
-                return Redirect("http://localhost:4200/login");
+                return Redirect("http://localhost:4200/email-verification-complete");
             }
             return BadRequest("Email Couldnt be Verified!");
         }
@@ -50,7 +52,7 @@ namespace JobHunterApi.Controllers
                 var smtpClient = new SmtpClient("smtp.gmail.com")
                 {
                     Port = 587,
-                    Credentials = new NetworkCredential("hiteshlakshmaiahdinesh@gmail.com", "qetc iqkk bysg cenu"),
+                    Credentials = new NetworkCredential("hiteshlakshmaiahdinesh@gmail.com", "zyzi pxzn bgvt wdri"),
                     EnableSsl = true,
                 };
                 

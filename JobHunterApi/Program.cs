@@ -71,13 +71,9 @@ var app = builder.Build();
 await SeedRolesAsync(app.Services);
 
 app.UseCors("AllowAngularApp");
-
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
-
-
 
 app.Run();
 

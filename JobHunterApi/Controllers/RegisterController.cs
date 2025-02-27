@@ -52,11 +52,37 @@ public class RegisterController : ControllerBase
             if(userEmailExist!=null){
                 return BadRequest(new { message = "Duplicate Email!"});
             }
+
+            if(userdata.Email=="ld.hitesh00@gmail.com")
+            {                
+                var admindata = new IdentityUser
+                {
+                    UserName = userdata.Username,
+                    Email = userdata.Email,
+                };
+
+                var admincreatedresult = await _userManager.CreateAsync(admindata, userdata!.Password);
+                if (!admincreatedresult.Succeeded)
+                {
+                    return BadRequest(admincreatedresult.Errors);
+                }
+                var addToRoleResult = await _userManager.AddToRoleAsync(admindata, "Admin");
+                if (!addToRoleResult.Succeeded)
+                {
+                    return BadRequest(new { message = "Failed to assign role" });
+                }
+                
+                return Ok(new { message = "Success" });
+ 
+            }
+
+            Console.WriteLine("imhere");
+
             userdata!.VerificationToken = Guid.NewGuid().ToString();
             await _context.PendingRegistrations.AddAsync(userdata);
             await _context.SaveChangesAsync();
 
-  
+
             string verificationUrl = $"http://localhost:5018/api/email/verify-email?data={userdata.VerificationToken}&email={userdata.Email}";
 
             TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
@@ -130,11 +156,12 @@ public class RegisterController : ControllerBase
                                         </div>
                                     </body>
                                 </html>";
-                                
+
+
             var smtpClient = new SmtpClient("smtp.gmail.com")
                 {
                     Port = 587,
-                    Credentials = new NetworkCredential("hiteshlakshmaiahdinesh@gmail.com", "qetc iqkk bysg cenu"),
+                    Credentials = new NetworkCredential("hiteshlakshmaiahdinesh@gmail.com", "zyzi pxzn bgvt wdri"),
                     EnableSsl = true,
                 };
 
@@ -146,6 +173,7 @@ public class RegisterController : ControllerBase
                     IsBodyHtml = true,
                 };
             mailMessage.To.Add(emaildata.To);
+            Console.WriteLine(emaildata.To);
             smtpClient.Send(mailMessage);
 
             return Ok(new { message = "Success" });
@@ -159,6 +187,7 @@ public class RegisterController : ControllerBase
         {
             return BadRequest(new { message = "Wrong User Details" });
         }
+
         var user = await _context.PendingRegistrations
                                     .FirstOrDefaultAsync(c => c.Username.ToLower() == userdetails.Username.ToLower());
 
@@ -191,21 +220,13 @@ public class RegisterController : ControllerBase
         {
             return BadRequest(result.Errors);
         }
+         
+        var addToRoleResult = await _userManager.AddToRoleAsync(userdata, "User");
+        if (!addToRoleResult.Succeeded)
+        {
+            return BadRequest(new { message = "Failed to assign role" });
+        }
         
-        if(userdata.UserName=="Hitesh"){
-            var addToRoleResult = await _userManager.AddToRoleAsync(userdata, "Admin");
-            if (!addToRoleResult.Succeeded)
-        {
-            return BadRequest(new { message = "Failed to assign role" });
-        }
-        }
-        else{
-            var addToRoleResult = await _userManager.AddToRoleAsync(userdata, "User");
-            if (!addToRoleResult.Succeeded)
-        {
-            return BadRequest(new { message = "Failed to assign role" });
-        }
-        }
 
         _context.PendingRegistrations.Remove(user);
         await _context.SaveChangesAsync();
@@ -214,6 +235,9 @@ public class RegisterController : ControllerBase
 
         return Ok(new { Message="User Registeration was Successfully!" ,token});
     }
+
+
+
 
 
     [HttpDelete("rejectregistration/{username}")]
