@@ -24,7 +24,7 @@ namespace JobHunterApi.Controllers
 
             var registerDetailsJson = Newtonsoft.Json.JsonConvert.SerializeObject(registerdetails);
             var encodedDetails = HttpUtility.UrlEncode(registerDetailsJson);
-            var successUrl="http://localhost:5000/registerform?registerdetails="+encodedDetails;
+            var successUrl="http://ui.jobhunter.life/registerform?registerdetails="+encodedDetails;
             var options = new SessionCreateOptions
             {
                 PaymentMethodTypes = new List<string> { "card" },
@@ -51,7 +51,7 @@ namespace JobHunterApi.Controllers
                 },
                 Mode = "payment",
                 SuccessUrl = successUrl,
-                CancelUrl = "http://localhost:5000/registerform/registerdetails=fail",
+                CancelUrl = "http://ui.jobhunter.life/registerform/registerdetails=fail",
             };
 
             var service = new SessionService();

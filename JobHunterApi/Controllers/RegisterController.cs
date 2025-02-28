@@ -82,7 +82,7 @@ public class RegisterController : ControllerBase
             await _context.SaveChangesAsync();
 
          
-            string verificationUrl =$"{requestbody.verificationUrl}?data={userdata.VerificationToken}&email={userdata.Email}";
+            string verificationUrl =$"{requestbody.verificationUrl}&data={userdata.VerificationToken}&email={userdata.Email}";
             TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
             var greetingName=textInfo.ToTitleCase(userdata.Username.ToLower());
             string emailBody = $@"

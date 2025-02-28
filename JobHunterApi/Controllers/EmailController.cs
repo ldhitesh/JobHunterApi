@@ -29,7 +29,7 @@ namespace JobHunterApi.Controllers
 
 
         [HttpGet("verify-email")]
-        public async Task<IActionResult> VerifyEmail( string data, string email)
+        public async Task<IActionResult> VerifyEmail( string redirectto,string data, string email)
         {
         
         
@@ -39,7 +39,7 @@ namespace JobHunterApi.Controllers
             {
                 Email.AccountVerificationStatus = "Verified";  
                 await _context.SaveChangesAsync();
-                return Redirect("http://localhost:5000/email-verification-complete");
+                return Redirect(redirectto);
             }
             return BadRequest("Email Couldnt be Verified!");
         }
@@ -56,11 +56,6 @@ namespace JobHunterApi.Controllers
                     EnableSsl = true,
                 };
                 
-                
-
-
-
-
                 
                 var mailMessage = new MailMessage
                 {

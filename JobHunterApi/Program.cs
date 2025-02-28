@@ -8,20 +8,20 @@ using JobHunterApi.Database;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.WebHost.ConfigureKestrel(options =>
-{
-    options.ListenAnyIP(4000); // Change to the port you want
-});
+// builder.WebHost.ConfigureKestrel(options =>
+// {
+//     options.ListenAnyIP(4000); // Change to the port you want
+// });
+// Add CORS support and configure the policy to allow any origin, method, and header
 builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAngularApp", policy =>
     {
-        policy.WithOrigins("http://localhost:5000") // Angular app URL
-              .AllowAnyMethod()                    // Allow all HTTP methods
-              .AllowAnyHeader()                    // Allow all headers
-              .AllowCredentials();                 // Allow cookies and credentials
+        options.AddPolicy("AllowAllOrigins", builder =>
+        {
+            builder.AllowAnyOrigin()  // Allow all origins (including Angular app, other apps)
+                   .AllowAnyMethod()  // Allow any HTTP method (GET, POST, PUT, DELETE, etc.)
+                   .AllowAnyHeader(); // Allow any headers
+        });
     });
-});
 
 builder.Services.AddDbContext<CompaniesDbContext>(options =>
     options.UseMySql(builder.Configuration.GetConnectionString("awsdatabase"), 
@@ -74,7 +74,7 @@ builder.Services.AddEndpointsApiExplorer();
 var app = builder.Build();
 await SeedRolesAsync(app.Services);
 
-app.UseCors("AllowAngularApp");
+app.UseCors("AllowAllOrigins");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
