@@ -4,10 +4,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace JobHunterApi.Migrations
+namespace JobHunterApi.Migrations.UserDb
 {
     /// <inheritdoc />
-    public partial class user : Migration
+    public partial class companies : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

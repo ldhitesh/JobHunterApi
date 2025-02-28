@@ -3,19 +3,16 @@ using JobHunterApi.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace JobHunterApi.Migrations.CompaniesDb
+namespace JobHunterApi.Migrations
 {
     [DbContext(typeof(CompaniesDbContext))]
-    [Migration("20250223083229_companies")]
-    partial class companies
+    partial class CompaniesDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

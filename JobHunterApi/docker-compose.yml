@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+
+  api:
+    build: .
+    image: jobhunterapi
+    container_name: jobhunterapi
+    environment:
+      - AwsDatabaseConnection="Server=db-jobhunter-instance.c3wicyiaymao.us-east-1.rds.amazonaws.com;Database=JobHunter_AWS_Database;port=3306;User=hitesh;Password=Hitzeeaws1312!"
+    ports:
+      - "8080:80"
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge
+
+

@@ -8,11 +8,15 @@ using JobHunterApi.Database;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(4000); // Change to the port you want
+});
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularApp", policy =>
     {
-        policy.WithOrigins("http://localhost:4200") // Angular app URL
+        policy.WithOrigins("http://localhost:5000") // Angular app URL
               .AllowAnyMethod()                    // Allow all HTTP methods
               .AllowAnyHeader()                    // Allow all headers
               .AllowCredentials();                 // Allow cookies and credentials
@@ -20,13 +24,13 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddDbContext<CompaniesDbContext>(options =>
-    options.UseMySql(builder.Configuration.GetConnectionString("LocalHostConnection"), 
-    ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("LocalHostConnection"))));
+    options.UseMySql(builder.Configuration.GetConnectionString("awsdatabase"), 
+    ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("awsdatabase"))));
     
 // Add services to the container.
 builder.Services.AddDbContext<UserDbContext>(options =>
-    options.UseMySql(builder.Configuration.GetConnectionString("LocalHostConnection"), 
-    ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("LocalHostConnection"))));
+    options.UseMySql(builder.Configuration.GetConnectionString("awsdatabase"), 
+    ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("awsdatabase"))));
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<UserDbContext>()
@@ -98,3 +102,9 @@ async Task SeedRolesAsync(IServiceProvider services)
         }
     }
 }
+
+
+// iam user access key: AKIAXWHDLSYE5H3UNUVO
+
+// iam user secret key :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
+

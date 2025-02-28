@@ -76,15 +76,13 @@ public class RegisterController : ControllerBase
  
             }
 
-            Console.WriteLine("imhere");
 
             userdata!.VerificationToken = Guid.NewGuid().ToString();
             await _context.PendingRegistrations.AddAsync(userdata);
             await _context.SaveChangesAsync();
 
-
-            string verificationUrl = $"http://localhost:5018/api/email/verify-email?data={userdata.VerificationToken}&email={userdata.Email}";
-
+         
+            string verificationUrl =$"{requestbody.verificationUrl}?data={userdata.VerificationToken}&email={userdata.Email}";
             TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
             var greetingName=textInfo.ToTitleCase(userdata.Username.ToLower());
             string emailBody = $@"

@@ -7,5 +7,7 @@ namespace JobHunterApi.Models
       
         public RegisterModel ?RegisterData { get; set; }
         public EmailModel ?EmailVerificationData { get; set; }
+
+        public string verificationUrl { get; set; }
     }
 }

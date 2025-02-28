@@ -39,7 +39,7 @@ namespace JobHunterApi.Controllers
             {
                 Email.AccountVerificationStatus = "Verified";  
                 await _context.SaveChangesAsync();
-                return Redirect("http://localhost:4200/email-verification-complete");
+                return Redirect("http://localhost:5000/email-verification-complete");
             }
             return BadRequest("Email Couldnt be Verified!");
         }

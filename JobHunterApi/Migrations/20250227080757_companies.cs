@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace JobHunterApi.Migrations.CompaniesDb
+namespace JobHunterApi.Migrations
 {
     /// <inheritdoc />
     public partial class companies : Migration

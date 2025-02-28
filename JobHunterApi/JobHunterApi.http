@@ -1,4 +1,4 @@
-@JobHunterApi_HostAddress = http://localhost:5018
+@JobHunterApi_HostAddress = http://localhost:5000
 
 GET {{JobHunterApi_HostAddress}}/weatherforecast/
 Accept: application/json
