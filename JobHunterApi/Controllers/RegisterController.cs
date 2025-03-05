@@ -42,16 +42,11 @@ public class RegisterController : ControllerBase
         return Ok(pendingregistrations);
     }
     
-    // [Authorize(AuthenticationSchemes = "Bearer",Roles = "User,Admin")]
+    [Authorize(AuthenticationSchemes = "Bearer",Roles = "Admin")]
     [HttpGet("getregisteredemails")]
 
     public async Task<IActionResult> GetRegisteredEmails()
     {
-        var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-
-
-
-
         var pendingEmails = await _context.PendingRegistrations
             .Where(u => u.Email != null)
             .Select(u => u.Email)
@@ -64,7 +59,7 @@ public class RegisterController : ControllerBase
 
         var allEmails = pendingEmails.Union(registeredEmails).ToList();
 
-        return Ok(new { message = "Some message", allEmails = allEmails, token = token });
+        return Ok(new { message = "Some message", allEmails = allEmails});
     }
 
 
@@ -199,7 +194,6 @@ public class RegisterController : ControllerBase
                     IsBodyHtml = true,
                 };
             mailMessage.To.Add(emaildata.To);
-            Console.WriteLine(emaildata.To);
             smtpClient.Send(mailMessage);
 
             return Ok(new { message = "Success" });

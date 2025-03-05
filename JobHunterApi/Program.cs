@@ -33,7 +33,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 
 // Add JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-.AddJwtBearer(options =>
+.AddJwtBearer("Bearer",options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
     {
@@ -43,20 +43,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         ValidateAudience = true,
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
         ValidAudience = builder.Configuration["Jwt:Audience"]
-    };
-
-    options.Events = new JwtBearerEvents
-    {
-        OnAuthenticationFailed = context =>
-        {
-            Console.WriteLine($"Authentication failed: {context.Exception.Message}");
-            return Task.CompletedTask;
-        },
-        OnTokenValidated = context =>
-        {
-            Console.WriteLine($"Token validated for: {context.Principal.Identity.Name}");
-            return Task.CompletedTask;
-        }
     };
 });
 
@@ -88,10 +74,6 @@ async Task SeedRolesAsync(IServiceProvider services)
             if (!roleExist)
             {
                 var roleResult = await roleManager.CreateAsync(new IdentityRole(role));
-                if (!roleResult.Succeeded)
-                {
-                    Console.WriteLine($"Error creating role: {role}");
-                }
             }
         }
     }
