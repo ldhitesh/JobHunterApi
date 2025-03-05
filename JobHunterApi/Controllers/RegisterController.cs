@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authorization;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -37,6 +38,24 @@ public class RegisterController : ControllerBase
                     .Select(u => new { u.Username, u.Email })
                     .ToListAsync();
         return Ok(pendingregistrations);
+    }
+
+    [HttpGet("getregisteredemails")]
+    public async Task<IActionResult> GetRegisteredEmails()
+    {
+        var pendingEmails = await _context.PendingRegistrations
+            .Where(u => u.Email != null)
+            .Select(u => u.Email)
+            .ToListAsync();
+
+        var registeredEmails = await _userManager.Users
+            .Where(u => u.Email != null)
+            .Select(u => u.Email)
+            .ToListAsync();
+
+        var allEmails = pendingEmails.Union(registeredEmails).ToList();
+
+        return Ok(allEmails);
     }
 
 
