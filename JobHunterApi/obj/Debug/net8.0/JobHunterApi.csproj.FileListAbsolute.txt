@@ -123,3 +123,4 @@
 /Users/hitesh/Desktop/Perosnal Projects/JobHunter/JobHunterApi/JobHunterApi/obj/Debug/net8.0/JobHunterApi.pdb
 /Users/hitesh/Desktop/Perosnal Projects/JobHunter/JobHunterApi/JobHunterApi/obj/Debug/net8.0/JobHunterApi.genruntimeconfig.cache
 /Users/hitesh/Desktop/Perosnal Projects/JobHunter/JobHunterApi/JobHunterApi/obj/Debug/net8.0/ref/JobHunterApi.dll
+/Users/hitesh/Desktop/Perosnal Projects/JobHunter/JobHunterApi/JobHunterApi/bin/Debug/net8.0/Microsoft.Bcl.Memory.dll

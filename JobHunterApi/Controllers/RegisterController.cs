@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.IdentityModel.JsonWebTokens;
+
 
 [Route("api/[controller]")]
 [ApiController]
@@ -39,10 +41,17 @@ public class RegisterController : ControllerBase
                     .ToListAsync();
         return Ok(pendingregistrations);
     }
-
+    
+    // [Authorize(AuthenticationSchemes = "Bearer",Roles = "User,Admin")]
     [HttpGet("getregisteredemails")]
+
     public async Task<IActionResult> GetRegisteredEmails()
     {
+        var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+
+
+
+
         var pendingEmails = await _context.PendingRegistrations
             .Where(u => u.Email != null)
             .Select(u => u.Email)
@@ -55,7 +64,7 @@ public class RegisterController : ControllerBase
 
         var allEmails = pendingEmails.Union(registeredEmails).ToList();
 
-        return Ok(allEmails);
+        return Ok(new { message = "Some message", allEmails = allEmails, token = token });
     }
 
 
