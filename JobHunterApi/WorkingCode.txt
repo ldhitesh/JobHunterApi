@@ -42,3 +42,7 @@
             RoleClaimType = ClaimTypes.Role  // Ensure role claims are correctly validated
         };
     });
+
+
+
+[Authorize(AuthenticationSchemes = "Bearer",Roles = "Admin")]

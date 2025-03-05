@@ -42,7 +42,6 @@ public class RegisterController : ControllerBase
         return Ok(pendingregistrations);
     }
     
-    [Authorize(AuthenticationSchemes = "Bearer",Roles = "Admin")]
     [HttpGet("getregisteredemails")]
 
     public async Task<IActionResult> GetRegisteredEmails()
