@@ -20,13 +20,6 @@ namespace JobHunterApi.Controllers
             _context = context;
         }
 
-        // [HttpPost("sendverificationmail")]
-        // public async Task<IActionResult> VerificationEmail([FromBody] EmailModel model)
-        // {
-        //     // Assuming user is successfully created
-            
-        // }
-
 
         [HttpGet("verify-email")]
         public async Task<IActionResult> VerifyEmail( string redirectto,string data, string email)
