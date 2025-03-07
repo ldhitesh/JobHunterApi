@@ -58,7 +58,7 @@ public class RegisterController : ControllerBase
 
         var allEmails = pendingEmails.Union(registeredEmails).ToList();
 
-        return Ok(new { message = "Some message", allEmails = allEmails});
+        return Ok(allEmails);
     }
 
 
