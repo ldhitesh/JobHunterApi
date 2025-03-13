@@ -107,6 +107,7 @@ namespace JobHunterApi.Controllers
             existingCompany.Description = company.Description;  // Update other fields as needed
             existingCompany.LastApplied = company.LastApplied;  // Update other fields as needed
             existingCompany.Status = company.Status;  // Update other fields as needed
+            existingCompany.Link = company.Link;  // Update other fields as needed
 
             // Save changes to the database
             await _context.SaveChangesAsync();
