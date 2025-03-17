@@ -45,4 +45,3 @@
 
 
 
-[Authorize(AuthenticationSchemes = "Bearer",Roles = "Admin")]

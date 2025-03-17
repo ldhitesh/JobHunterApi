@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using JobHunterApi.Database;
+using System.Text.Json;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,18 +33,65 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddDefaultTokenProviders();
 
 // Add JWT Authentication
+
+//Uses my database and my own JWT 
+
+// builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+// .AddJwtBearer("Bearer",options =>
+// {
+//     options.TokenValidationParameters = new TokenValidationParameters
+//     {
+//         ValidateIssuerSigningKey = true,
+//         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+//         ValidateIssuer = true,
+//         ValidateAudience = true,
+//         ValidIssuer = builder.Configuration["Jwt:Issuer"],
+//         ValidAudience = builder.Configuration["Jwt:Audience"]
+//     };
+// });
+
+
+//Uses Auth0 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-.AddJwtBearer("Bearer",options =>
-{
-    options.TokenValidationParameters = new TokenValidationParameters
+    .AddJwtBearer("Bearer", options =>
     {
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience = builder.Configuration["Jwt:Audience"]
-    };
+        // Token validation parameters (for RS256 signature algorithm)
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidIssuer = "https://dev-23jl6hcwap6zsa4n.us.auth0.com/", // Ensure the issuer is correct
+            ValidAudience = "0wWmE5XJ8RNcCzPaha3XeWUBZ46WdeaD", // Ensure the audience is correct
+            ValidateIssuerSigningKey = true,  // Ensure the key is being validated
+
+            // Resolving the signing key via JWKS
+            IssuerSigningKeyResolver = (token, securityToken, keyIdentifier, validationParameters) =>
+            {
+                using var client = new HttpClient();
+                var jwks = client.GetStringAsync("https://dev-23jl6hcwap6zsa4n.us.auth0.com/.well-known/jwks.json").Result;
+                var jwksDocument = JsonSerializer.Deserialize<JsonElement>(jwks);
+                // Extract keys from the JWKS response
+                var keys = jwksDocument.GetProperty("keys").EnumerateArray()
+                    .Where(key => key.GetProperty("kid").GetString() == keyIdentifier)
+                    .Select(key => new JsonWebKey(key.GetRawText()))
+                    .ToList();
+                return keys;
+            },
+            
+        };
+
+    });
+
+
+// Authorization policies (based on specific claims in the token)
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminPolicy", policy =>
+        policy.RequireClaim("jobhunter-roles", "admin"));
+    
+    options.AddPolicy("UserPolicy", policy =>
+        policy.RequireClaim("jobhunter-roles", "user"));
 });
 
 

@@ -27,8 +27,8 @@ namespace JobHunterApi.Controllers
             return Ok(references);
         }
 
+        // [Authorize(AuthenticationSchemes = "Bearer" ,Policy = "AdminPolicy")]
         [HttpGet]
-
         public async Task<IActionResult> GetCompanies()
         {
             var companies = await _context.Companies.ToListAsync();
