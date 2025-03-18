@@ -169,7 +169,7 @@ public class RegisterController : ControllerBase
                                                 <p>Thank you for registering with JobHunter! To complete the sign-up process and activate your account, please verify your email address by clicking the link below:</p>
                                                 <p><a href='{verificationUrl}'>Verify My Email Address</a></p>
                                                 <p> If you did not create an account with JobHunter, please ignore this email.Your email address will not be used for any further communication.</p>
-                                                <p>For any questions or issues, feel free to contact our support team at <a href='mailto:hiteshlakshmaiahdinesh@gmail.com'>hiteshlakshmaiahdinesh@gmail.com</a>.</p>
+                                                <p>For any questions or issues, feel free to contact our support team at <a href='mailto:jobhuntertechteam@gmail.com'>jobhuntertechteam@gmail.com</a>.</p>
                                                 <p>Thank you for choosing JobHunter!</p>
                                                 <p>Best regards,<br>The JobHunter Team</p>
                                             </div>
@@ -181,13 +181,13 @@ public class RegisterController : ControllerBase
             var smtpClient = new SmtpClient("smtp.gmail.com")
                 {
                     Port = 587,
-                    Credentials = new NetworkCredential("hiteshlakshmaiahdinesh@gmail.com", "zyzi pxzn bgvt wdri"),
+                    Credentials = new NetworkCredential("jobhuntertechteam@gmail.com", "vskw iwdj tskn mznt"),
                     EnableSsl = true,
                 };
 
             var mailMessage = new MailMessage
                 {
-                    From = new MailAddress("hiteshlakshmaiahdinesh@gmail.com"),
+                    From = new MailAddress("jobhuntertechteam@gmail.com"),
                     Subject = emaildata!.Subject,
                     Body = emailBody, 
                     IsBodyHtml = true,

@@ -45,14 +45,14 @@ namespace JobHunterApi.Controllers
                 var smtpClient = new SmtpClient("smtp.gmail.com")
                 {
                     Port = 587,
-                    Credentials = new NetworkCredential("hiteshlakshmaiahdinesh@gmail.com", "zyzi pxzn bgvt wdri"),
+                    Credentials = new NetworkCredential("jobhuntertechteam@gmail.com", "vskw iwdj tskn mznt"),
                     EnableSsl = true,
                 };
                 
                 
                 var mailMessage = new MailMessage
                 {
-                    From = new MailAddress("hiteshlakshmaiahdinesh@gmail.com"),
+                    From = new MailAddress("jobhuntertechteam@gmail.com"),
                     Subject = emaildata.Subject ?? "No Subject",
                     Body = emaildata.Body, //.Replace("\n", "<pre>") ?? "No Body",
                     IsBodyHtml = true,
