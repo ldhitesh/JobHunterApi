@@ -17,6 +17,8 @@ namespace JobHunterApi.Controllers
         }
 
         // GET: api/companies/getcompaniesnames
+        // [Authorize(AuthenticationSchemes = "Auth0")]
+
         [HttpGet("getcompanyreferences")]
         public async Task<IActionResult> GetCompanyReferences()
         {
@@ -27,7 +29,7 @@ namespace JobHunterApi.Controllers
             return Ok(references);
         }
 
-        // [Authorize(AuthenticationSchemes = "Bearer" ,Policy = "AdminPolicy")]
+        // [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet]
         public async Task<IActionResult> GetCompanies()
         {
