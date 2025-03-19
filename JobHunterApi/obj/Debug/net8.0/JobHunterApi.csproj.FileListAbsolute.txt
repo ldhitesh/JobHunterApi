@@ -273,4 +273,4 @@
 /Users/hitesh/Desktop/PerosnalProjects/JobHunter/JobHunterApi/JobHunterApi/obj/Debug/net8.0/JobHunterApi.pdb
 /Users/hitesh/Desktop/PerosnalProjects/JobHunter/JobHunterApi/JobHunterApi/obj/Debug/net8.0/JobHunterApi.genruntimeconfig.cache
 /Users/hitesh/Desktop/PerosnalProjects/JobHunter/JobHunterApi/JobHunterApi/obj/Debug/net8.0/ref/JobHunterApi.dll
-/Users/hitesh/Desktop/PerosnalProjects/JobHunter/JobHunterApi/JobHunterApi/bin/Debug/net8.0/client_secret_606820423042-cnc8ns70eiu48hjjpd4qv41uv0lfjet7.apps.googleusercontent.com.json
+/Users/hitesh/Desktop/PerosnalProjects/JobHunter/JobHunterApi/JobHunterApi/bin/Debug/net8.0/gmail_api_credentials.json

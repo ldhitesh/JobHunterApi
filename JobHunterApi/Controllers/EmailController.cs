@@ -60,6 +60,7 @@ namespace JobHunterApi.Controllers
                 // Step 1: Authenticate the user and get the Gmail service instance
                 var emailService = await GoogleOAuthHelper.AuthenticateAsync();
                 
+               
 
                 // Step 2: Send an email
                 if (string.IsNullOrEmpty(emailRequest.FromEmail) || string.IsNullOrEmpty(emailRequest.ToEmail))
@@ -69,8 +70,9 @@ namespace JobHunterApi.Controllers
 
                 // Send the email
                 await GoogleOAuthHelper.SendEmailAsync(emailService, emailRequest.FromEmail, emailRequest.ToEmail, emailRequest.Subject, emailRequest.Body);
-
-                return Ok("Email sent successfully!");
+                    
+                
+                return Ok(new { message = "Email sent successfully!" });
             }
             catch (Exception ex)
             {

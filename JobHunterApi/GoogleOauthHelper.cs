@@ -18,7 +18,7 @@ namespace JobHunterApi
         private static string ApplicationName = "Gmail API .NET Send Email";
 
         // Path to the credentials file (should be the same in both cases)
-        private static string CredentialPath = "/Users/hitesh/Desktop/PerosnalProjects/JobHunter/JobHunterApi/JobHunterApi/client_secret_606820423042-cnc8ns70eiu48hjjpd4qv41uv0lfjet7.apps.googleusercontent.com.json";
+        private static string CredentialPath = "gmail_api_credentials.json";
 
         public static async Task<GmailService> AuthenticateAsync()
         {
@@ -36,13 +36,14 @@ namespace JobHunterApi
                             Scopes,
                             "user", // Unique identifier for the user
                             CancellationToken.None,
-                            new FileDataStore("/Users/hitesh/Desktop/PerosnalProjects/JobHunter/JobHunterApi/JobHunterApi", true));
+                            new FileDataStore("GmailApiTokens/client_secret.json", true),
+                            new LocalServerCodeReceiver()  );
                     }
                 }
                 else
                 {
                     // If the file doesn't exist, we create the OAuth flow
-                    using (var stream = new FileStream("credentials.json", FileMode.Open, FileAccess.Read))
+                    using (var stream = new FileStream("GmailApiTokens/client_secret.json", FileMode.Open, FileAccess.Read))
                     {
                         credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
                             GoogleClientSecrets.Load(stream).Secrets,
@@ -65,6 +66,7 @@ namespace JobHunterApi
             }
             catch (Exception ex)
             {
+
                 Console.WriteLine($"Error during authentication: {ex.Message}");
                 throw;
             }
