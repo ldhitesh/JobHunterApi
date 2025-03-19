@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/hitesh/Desktop/Perosnal Projects/JobHunter/JobHunterApi/JobHunterApi/JobHunterApi.csproj": {}
+    "/Users/hitesh/Desktop/PerosnalProjects/JobHunter/JobHunterApi/JobHunterApi/JobHunterApi.csproj": {}
   },
   "projects": {
-    "/Users/hitesh/Desktop/Perosnal Projects/JobHunter/JobHunterApi/JobHunterApi/JobHunterApi.csproj": {
+    "/Users/hitesh/Desktop/PerosnalProjects/JobHunter/JobHunterApi/JobHunterApi/JobHunterApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/hitesh/Desktop/Perosnal Projects/JobHunter/JobHunterApi/JobHunterApi/JobHunterApi.csproj",
+        "projectUniqueName": "/Users/hitesh/Desktop/PerosnalProjects/JobHunter/JobHunterApi/JobHunterApi/JobHunterApi.csproj",
         "projectName": "JobHunterApi",
-        "projectPath": "/Users/hitesh/Desktop/Perosnal Projects/JobHunter/JobHunterApi/JobHunterApi/JobHunterApi.csproj",
+        "projectPath": "/Users/hitesh/Desktop/PerosnalProjects/JobHunter/JobHunterApi/JobHunterApi/JobHunterApi.csproj",
         "packagesPath": "/Users/hitesh/.nuget/packages/",
-        "outputPath": "/Users/hitesh/Desktop/Perosnal Projects/JobHunter/JobHunterApi/JobHunterApi/obj/",
+        "outputPath": "/Users/hitesh/Desktop/PerosnalProjects/JobHunter/JobHunterApi/JobHunterApi/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/hitesh/.nuget/NuGet/NuGet.Config"
@@ -44,6 +44,18 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Google.Apis.Auth": {
+              "target": "Package",
+              "version": "[1.69.0, )"
+            },
+            "Google.Apis.Gmail.v1": {
+              "target": "Package",
+              "version": "[1.68.0.3427, )"
+            },
+            "MailKit": {
+              "target": "Package",
+              "version": "[4.11.0, )"
+            },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[8.0.0, )"
@@ -71,6 +83,10 @@
             "Microsoft.IdentityModel.JsonWebTokens": {
               "target": "Package",
               "version": "[8.6.0, )"
+            },
+            "MimeKit": {
+              "target": "Package",
+              "version": "[4.11.0, )"
             },
             "Pomelo.EntityFrameworkCore.MySql": {
               "target": "Package",

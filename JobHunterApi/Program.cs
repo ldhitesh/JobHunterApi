@@ -8,6 +8,9 @@ using System.Text.Json;
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+
 // Add CORS support and configure the policy to allow any origin, method, and header
 builder.Services.AddCors(options =>
     {

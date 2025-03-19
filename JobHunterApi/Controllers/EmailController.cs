@@ -7,6 +7,15 @@ using JobHunterApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Expressions;
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Gmail.v1;
+using Google.Apis.Gmail.v1.Data;
+using Google.Apis.Services;
+using Google.Apis.Util.Store;
+using System;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace JobHunterApi.Controllers
 {
@@ -36,6 +45,40 @@ namespace JobHunterApi.Controllers
             }
             return BadRequest("Email Couldnt be Verified!");
         }
+
+        [HttpGet("oauth2callback")]
+        public async Task<IActionResult> Callbackfunctn()
+        {
+            return Ok("success!");
+        }
+        [HttpPost("sendgmailapi")]
+        public async Task<IActionResult> SendEmailAsync(EmailRequest emailRequest)
+        {
+            try
+            {
+
+                // Step 1: Authenticate the user and get the Gmail service instance
+                var emailService = await GoogleOAuthHelper.AuthenticateAsync();
+                
+
+                // Step 2: Send an email
+                if (string.IsNullOrEmpty(emailRequest.FromEmail) || string.IsNullOrEmpty(emailRequest.ToEmail))
+                {
+                    return BadRequest("FromEmail and ToEmail cannot be null or empty.");
+                }
+
+                // Send the email
+                await GoogleOAuthHelper.SendEmailAsync(emailService, emailRequest.FromEmail, emailRequest.ToEmail, emailRequest.Subject, emailRequest.Body);
+
+                return Ok("Email sent successfully!");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
+        }
+
 
         [HttpPost("send")]
         public async Task<IActionResult> SendEmail([FromBody] EmailModel emaildata)
