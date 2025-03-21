@@ -22,6 +22,10 @@ builder.Services.AddCors(options =>
         });
     });
 
+builder.Services.AddDbContext<DiscussionDBContext>(options =>
+    options.UseMySql(builder.Configuration.GetConnectionString("LocalHostConnection"), 
+    ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("LocalHostConnection"))));
+    
 builder.Services.AddDbContext<CompaniesDbContext>(options =>
     options.UseMySql(builder.Configuration.GetConnectionString("LocalHostConnection"), 
     ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("LocalHostConnection"))));
