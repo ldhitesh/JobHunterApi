@@ -18,9 +18,37 @@ namespace JobHunterApi.Controllers
         [HttpGet("getposts")]
         public async Task<IActionResult> GetPosts()
         {
-          var posts = await _context.UserPosts.OrderByDescending(x => x.posted_date)
-                                .ToListAsync();
-            return Ok(posts);
+            var posts = await _context.UserPosts
+                .OrderByDescending(x => x.posted_date)
+                .ToListAsync();
+
+            // Get all replies in one query (for better performance)
+            var replies = await _context.UserPostReplies
+                .ToListAsync();
+
+            // Map replies to each post
+            var result = posts.Select(post => new PostReplyModel
+            {
+                post_id = post.post_id,
+                title = post.title,
+                author = post.author,
+                summary = post.summary,
+                user_id = post.user_id,
+                posted_date = post.posted_date,
+                replies = replies
+                    .Where(r => r.post_id == post.post_id)
+                    .Select(r => new RepliesModel
+                    {
+                        reply_id = r.reply_id,
+                        user_id = r.user_id,
+                        reply_summary = r.reply_summary,
+                        replied_on = r.replied_on,
+                        post_id = r.post_id,
+                        username=r.username
+                    })
+                    .ToList()
+            }).ToList();
+            return Ok(result);
         }
 
         [HttpPost("addpost")]
@@ -60,7 +88,7 @@ namespace JobHunterApi.Controllers
 
 
         [HttpPatch("updatepost/{postid}")]
-        public async Task<IActionResult> UpdateCompany(int postid, PostsModel Post)
+        public async Task<IActionResult> UpdatePost(int postid, PostsModel Post)
         {
             
             if (postid==null)
@@ -109,12 +137,66 @@ namespace JobHunterApi.Controllers
             {
                 await _context.UserPostReplies.AddAsync(Reply);  // Add the post asynchronously
                 await _context.SaveChangesAsync();  // Save changes to the database
-                return Ok(new { Message = "Reply Created Successfully!" });
+                return Ok(new { Message = "Reply Created Successfully!",reply=Reply});
             }
             else
             {
-                return BadRequest(new { Message = "Creating a Reply failed!" });
+                return BadRequest(new { Message = "Creating a Reply failed!"});
             }
         }
+
+
+
+        [HttpDelete("deletereply/{replyid}")]
+        public async Task<IActionResult> DeleteReply(int replyid)
+        {
+
+            var reply = await _context.UserPostReplies
+                                        .FirstOrDefaultAsync(c => c.reply_id == replyid);
+
+            if (reply == null)
+            {
+                return NotFound(new { message = "There's no reply found." });
+            }
+
+            _context.UserPostReplies.Remove(reply);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Reply deleted successfully!" });
+        }
+
+
+        [HttpPatch("updatereply/{replyid}")]
+        public async Task<IActionResult> UpdateReply(int replyid, RepliesModel Reply)
+        {
+            
+            if (replyid==null)
+            {
+                return BadRequest(new { message = "Reply ID  is required." });
+            }
+
+            if (Reply == null)
+            {
+                return BadRequest(new { message = "No Reply Information available" });
+            }
+
+            // Find the existing company by its organization name
+            var existingReply = await _context.UserPostReplies
+                                                .FirstOrDefaultAsync(c => c.reply_id == replyid);
+
+            if (existingReply == null)
+            {
+                return NotFound(new { message = "Reply not found." });
+            }
+            existingReply.reply_summary = Reply.reply_summary;  
+            existingReply.replied_on = Reply.replied_on;  
+
+            // Save changes to the database
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Reply updated successfully!",existingReply });
+        }
+
+
     }
 }
