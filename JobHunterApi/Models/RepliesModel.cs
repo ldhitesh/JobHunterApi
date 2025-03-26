@@ -14,6 +14,8 @@ namespace JobHunterApi.Models
         public string reply_summary { get; set; } 
         public string replied_on { get; set; }
         public string username { get; set; }
+        public string replyprofilepic{ get; set; }
+
 
     }
 }

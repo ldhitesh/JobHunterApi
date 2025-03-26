@@ -13,5 +13,6 @@ namespace JobHunterApi.Models
         public string summary { get; set; }
         public string user_id { get; set; }
         public string posted_date { get; set; }
+        public string postprofilepic{ get; set; }
     }
 }

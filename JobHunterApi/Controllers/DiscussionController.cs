@@ -22,9 +22,10 @@ namespace JobHunterApi.Controllers
                 .OrderByDescending(x => x.posted_date)
                 .ToListAsync();
 
-            // Get all replies in one query (for better performance)
+
             var replies = await _context.UserPostReplies
-                .ToListAsync();
+                                .OrderByDescending(x => x.replied_on)
+                                .ToListAsync();
 
             // Map replies to each post
             var result = posts.Select(post => new PostReplyModel
@@ -35,6 +36,7 @@ namespace JobHunterApi.Controllers
                 summary = post.summary,
                 user_id = post.user_id,
                 posted_date = post.posted_date,
+                postprofilepic=post.postprofilepic,
                 replies = replies
                     .Where(r => r.post_id == post.post_id)
                     .Select(r => new RepliesModel
@@ -44,7 +46,8 @@ namespace JobHunterApi.Controllers
                         reply_summary = r.reply_summary,
                         replied_on = r.replied_on,
                         post_id = r.post_id,
-                        username=r.username
+                        username=r.username,
+                        replyprofilepic=r.replyprofilepic
                     })
                     .ToList()
             }).ToList();
