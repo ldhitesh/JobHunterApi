@@ -1,4 +1,5 @@
 using JobHunterApi.Models;
+using JobHunterApi.Database;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -14,19 +15,31 @@ namespace JobHunterApi.Controllers
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IConfiguration _configuration;
+        private readonly CompaniesDbContext _context;
 
-        public LoginController(UserManager<IdentityUser> userManager, IConfiguration configuration)
+        public LoginController( UserManager<IdentityUser> userManager, 
+                                IConfiguration configuration,
+                                CompaniesDbContext context)
         {
             _userManager = userManager;
             _configuration = configuration;
+            _context = context;
         }
 
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] User model)
         {
+             
             var user = await _userManager.FindByNameAsync(model.UserName);
+
             if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
             {
+                var userExist = _context.PendingRegistrations
+                                    .Where(c => c.Username.ToLower() == model.UserName.ToLower());
+
+                if(userExist!=null){
+                    return Unauthorized(new { message = "waiting for approval" });
+                }
                 return Unauthorized(new { message = "Invalid username or password." });
             }
             var role = await _userManager.GetRolesAsync(user);
