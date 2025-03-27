@@ -29,7 +29,10 @@ namespace JobHunterApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] User model)
         {
-             
+
+            if(model.UserName == "" || model.Password == ""){
+                return Unauthorized(new { message = "Invalid username or password." });
+            }
             var user = await _userManager.FindByNameAsync(model.UserName);
 
             if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
