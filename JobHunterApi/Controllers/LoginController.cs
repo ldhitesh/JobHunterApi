@@ -38,11 +38,20 @@ namespace JobHunterApi.Controllers
             if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
             {
                 var userExist = _context.PendingRegistrations
-                                    .Where(c => c.Username.ToLower() == model.UserName.ToLower());
+                                            .FirstOrDefault(c => c.Username.ToLower() == model.UserName.ToLower());
 
-                if(userExist!=null){
-                    return Unauthorized(new { message = "waiting for approval" });
+                if (userExist != null)
+                {
+                    if (userExist.AccountVerificationStatus == "Verified")
+                    {
+                        return Unauthorized(new { message = "Your account is waiting for approval." });
+                    }
+                    else
+                    {
+                        return Unauthorized(new { message = "Account verification is required." });
+                    }
                 }
+
                 return Unauthorized(new { message = "Invalid username or password." });
             }
             var role = await _userManager.GetRolesAsync(user);
