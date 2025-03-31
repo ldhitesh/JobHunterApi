@@ -7,6 +7,8 @@ namespace JobHunterApi.Models
 {
     public class EmailRequest
     {
+
+        public string SenderName{ get; set; }
         public string FromEmail { get; set; }
         public string ToEmail { get; set; }
         public string Subject { get; set; }

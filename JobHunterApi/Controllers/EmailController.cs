@@ -4,6 +4,7 @@ using System.Net.Mail;
 using System.Text;
 using JobHunterApi.Database;
 using JobHunterApi.Models;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Expressions;
@@ -56,29 +57,51 @@ namespace JobHunterApi.Controllers
         {
             try
             {
-
                 // Step 1: Authenticate the user and get the Gmail service instance
                 var emailService = await GoogleOAuthHelper.AuthenticateAsync();
-                
-               
-
+    
                 // Step 2: Send an email
                 if (string.IsNullOrEmpty(emailRequest.FromEmail) || string.IsNullOrEmpty(emailRequest.ToEmail))
                 {
                     return BadRequest("FromEmail and ToEmail cannot be null or empty.");
                 }
 
-                // Send the email
-                await GoogleOAuthHelper.SendEmailAsync(emailService, emailRequest.FromEmail, emailRequest.ToEmail, emailRequest.Subject, emailRequest.Body);
+
+                if(emailRequest.ToEmail=="Recruiter")
+                {
+                        var Emails =  await _context.CompanyReferences
+                                            .Where(u => u.Position == "Recruiter")
+                                            .Select(u => u.Email).ToListAsync();
                     
-                
+                    foreach(var email in Emails){
+                        await GoogleOAuthHelper.SendEmailAsync(emailService, emailRequest.FromEmail, email, emailRequest.Subject, emailRequest.Body,emailRequest.SenderName);
+                    }
+                    return Ok(new { message = "All Emails sent successfully!" });
+                }
+                else if(emailRequest.ToEmail=="Employees"){
+                    var Emails =  await _context.CompanyReferences
+                                            .Where(u => u.Position != "Recruiter")
+                                            .Select(u => u.Email).ToListAsync();
+                    foreach(var email in Emails){
+                        await GoogleOAuthHelper.SendEmailAsync(emailService, emailRequest.FromEmail, email, emailRequest.Subject, emailRequest.Body,emailRequest.SenderName);
+
+                    }
+                    return Ok(new { message = "All Emails sent successfully!" });
+                }
+                else{
+                    await GoogleOAuthHelper.SendEmailAsync(emailService, emailRequest.FromEmail, emailRequest.ToEmail, emailRequest.Subject, emailRequest.Body,emailRequest.SenderName);
+                }
+                    
                 return Ok(new { message = "Email sent successfully!" });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred: {ex.Message}");
-                return StatusCode(500, $"An error occurred: {ex.Message}");
-            }
+                            // Send the emai
+                            
+                            return Ok(new { message = "Email sent successfully!" });
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"An error occurred: {ex.Message}");
+                            return StatusCode(500, $"An error occurred: {ex.Message}");
+                        }
         }
 
 

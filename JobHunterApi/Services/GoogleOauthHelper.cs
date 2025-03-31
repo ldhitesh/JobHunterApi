@@ -8,6 +8,7 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using MailKit;
 
 namespace JobHunterApi
 {
@@ -15,7 +16,7 @@ namespace JobHunterApi
     {
         // Scopes for Gmail API
         private static string[] Scopes = { GmailService.Scope.GmailSend };
-        private static string ApplicationName = "Gmail API .NET Send Email";
+        private static string ApplicationName = "Job Hunter";
 
         // Path to the credentials file (should be the same in both cases)
         private static string CredentialPath = "gmail_api_credentials.json";
@@ -72,18 +73,18 @@ namespace JobHunterApi
             }
         }
 
-        public static async Task SendEmailAsync(GmailService service, string fromEmail, string toEmail, string subject, string body)
+        public static async Task SendEmailAsync(GmailService service, string fromEmail, string toEmail, string subject, string body,string senderName)
         {
             try
             {
                 // Create the email message
                 var message = new Message
                 {
-                    Raw = Base64UrlEncode(CreateEmail(fromEmail, toEmail, subject, body))
+                    Raw = Base64UrlEncode(CreateEmail(fromEmail, toEmail, subject, body,senderName))
                 };
 
                 // Send the email using the Gmail API
-                await service.Users.Messages.Send(message, "me").ExecuteAsync();
+                await service.Users.Messages.Send(message, fromEmail).ExecuteAsync();
             }
             catch (Exception ex)
             {
@@ -93,14 +94,19 @@ namespace JobHunterApi
         }
 
         // Create MimeMessage using MimeKit
-        private static MimeMessage CreateEmail(string from, string to, string subject, string body)
+        private static MimeMessage CreateEmail(string from, string to, string subject, string body,string senderName)
         {
             var emailMessage = new MimeMessage();
             // Use the display name and email address for both From and To
-            emailMessage.From.Add(new MailboxAddress("Sender Name", from));
-            emailMessage.To.Add(new MailboxAddress("Recipient Name", to));
+            emailMessage.From.Add(new MailboxAddress(senderName, from));
+            emailMessage.To.Add(new MailboxAddress(to.ToString(), to));
             emailMessage.Subject = subject;
-            emailMessage.Body = new TextPart("plain") { Text = body };
+
+            emailMessage.Body = new TextPart("plain")
+            {
+                Text = body
+            };
+
 
             using (var memoryStream = new MemoryStream())
             {
