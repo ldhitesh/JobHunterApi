@@ -13,6 +13,7 @@ namespace JobHunterApi.Models
         public string ?Status{get; set;}="Not Applied";
         public string? LastApplied { get; set;}="Yet to Apply";
         public string? Link { get; set;}=string.Empty;
+        public string? source { get; set;}=string.Empty;
 
     }
 }

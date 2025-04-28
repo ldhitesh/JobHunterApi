@@ -117,7 +117,6 @@ namespace JobHunterApi.Controllers
                     EnableSsl = true,
                 };
                 
-                
                 var mailMessage = new MailMessage
                 {
                     From = new MailAddress("jobhuntertechteam@gmail.com"),

@@ -200,6 +200,60 @@ namespace JobHunterApi.Controllers
             return Ok(new { message = "Reply updated successfully!",existingReply });
         }
 
+        
+        [HttpGet("getleetcodeproblemslist")]
+        public async Task<IActionResult> GetLeetcodeProblems()
+        {
+            var problems = await _context.LeetCodeProblemsData
+                .OrderBy(x => x.problem_id)
+                .ToListAsync();
+            return Ok(problems);
+        }
+
+        [HttpPost("postleetcodeproblemslist")]
+        public async Task<IActionResult> PostLeetcodeProblems(LeetCodeModel problemData)
+        {
+             if (ModelState.IsValid)  // Ensure the incoming post is valid
+            {
+                var maxProblemId = await _context.LeetCodeProblemsData
+                .MaxAsync(p => (int?)p.problem_id);  
+
+                problemData.problem_id = maxProblemId.HasValue ? maxProblemId.Value + 1 : 1;
+                
+                await _context.LeetCodeProblemsData.AddAsync(problemData);  // Add the post asynchronously
+                await _context.SaveChangesAsync();  // Save changes to the database
+                return Ok(new { Message = "Problem Added Successfully!", Data=problemData });
+            }
+            else
+            {
+                return BadRequest(new { Message = "Adding a leetcode problem failed!" });
+            }
+        }
+
+        [HttpPatch("updateleetcodeproblemslist")]
+        public async Task<IActionResult> UpdateLeetcodeProblems(LeetCodeModel problemData)
+        {
+             if (ModelState.IsValid)  // Ensure the incoming post is valid
+            {
+                var existingProblem = await _context.LeetCodeProblemsData
+                                                .FirstOrDefaultAsync(c => c.problem_id == problemData.problem_id);
+
+                if (existingProblem == null)
+                {
+                    return NotFound(new { message = "Problem not found." });
+                }
+                existingProblem.problem_notes = problemData.problem_notes;  
+                existingProblem.problem_id = problemData.problem_id;  
+
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "Problem updated successfully!",Data= existingProblem });
+              }
+            else
+            {
+                return BadRequest(new { Message = "Updating a leetcode problem failed!" });
+            }
+        }
 
     }
 }

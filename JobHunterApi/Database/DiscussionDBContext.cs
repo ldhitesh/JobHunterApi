@@ -17,10 +17,15 @@ namespace JobHunterApi.Database
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<RepliesModel>()
                 .HasKey(e => e.reply_id);
+            
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<LeetCodeModel>()
+                .HasKey(e => e.problem_id);
         }
 
         public DbSet<PostsModel> UserPosts{ get; set; }
         public DbSet<RepliesModel> UserPostReplies  { get; set; }
+        public DbSet<LeetCodeModel> LeetCodeProblemsData {get;set;}
 
     }
 }
